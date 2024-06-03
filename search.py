@@ -30,14 +30,8 @@ class WebSearcher:
         self.server = server
         self.model_endpoint = model_endpoint
         load_config('config.yaml')
-        if server == 'openai':
-            self.api_key = os.getenv("OPENAI_API_KEY")
-            self.headers = {
-            'Content-Type': 'application/json',
-            'Authorization': f'Bearer {self.api_key}'
-        }
-        else:
-            self.headers = {"Content-Type": "application/json"}
+        
+        self.headers = {"Content-Type": "application/json"}
         self.model = model
         self.verbose = verbose
 
@@ -57,27 +51,7 @@ class WebSearcher:
                 "temperature": 0,
             }
         
-        if self.server == 'runpod' or self.server == 'openai':
-            payload = {
-                "model": self.model,
-                "response_format": {"type": "json_object"},
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": generate_searches_prompt
-                    },
-                    {
-                        "role": "user",
-                        "content": f"Query: {query}\n\nPlan: {plan}"
-                    }
-                ],
-                "temperature": 0,
-                "stop": self.stop
-
-            }
-
-            if self.server == 'openai':
-               del payload["stop"]
+        
 
 
         try: 
@@ -89,11 +63,8 @@ class WebSearcher:
                 print(f"Response JSON: {response_json}")
                 search_query = response_json.get('response', '')
 
-            if self.server == 'runpod' or self.server == 'openai':
-                response_content = response_dict['choices'][0]['message']['content']
-                response_json = json.loads(response_content)
-                search_query = response_json.get('response', '')
-            
+        
+        
             # print(f"Search dict DEBUG: {response_dict}")
             print(f"Search Query: {search_query}")
 
@@ -115,27 +86,7 @@ class WebSearcher:
                 "temperature": 0,
             }
         
-        if self.server == 'runpod' or self.server == 'openai':
-            payload = {
-                "model": self.model,
-                "response_format": {"type": "json_object"},
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": get_search_page_prompt
-                    },
-                    {
-                        "role": "user",
-                        "content": f"Query: {query}\n\nPlan: {plan}\n\nSearch Results: {search_results} \n\nFailed Sites: {failed_sites}\n\nVisited Sites: {visited_sites}"
-                    }
-                ],
-                "temperature": 0,
-                "stop": self.stop
-            }
-
-            if self.server == 'openai':
-                del payload["stop"]
-
+        
         try: 
             response = requests.post(self.model_endpoint, headers=self.headers, data=json.dumps(payload))
             response_dict = response.json()
@@ -144,11 +95,7 @@ class WebSearcher:
                 response_json = json.loads(response_dict['response'])
                 search_query = response_json.get('response', '')
 
-            if self.server == 'runpod' or self.server == 'openai':
-                response_content = response_dict['choices'][0]['message']['content']
-                response_json = json.loads(response_content)
-                search_query = response_json.get('response', '')
-           
+                   
             return search_query
         
         except Exception as e:
