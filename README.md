@@ -2,10 +2,6 @@
 
 A custom websearch agent useable with Ollama, OpenAI and vLLM.
 
-### Agent Schema:
-![Agent Schema](AgentSchema.png)
-
-
 ### Prerequisites
 
 #### Environment Setup
@@ -31,7 +27,6 @@ Ollama[https://github.com/ollama/ollama/blob/main/docs/api.md#list-local-models]
 
 ### Clone and Navigate to the Repository
 
-
 1. **Navigate to the Repo:**
    ```
    cd /path/to/your-repo/custom_websearch_llm_agent_with_llama3_instruct_8B_using_ollama
@@ -43,6 +38,7 @@ Ollama[https://github.com/ollama/ollama/blob/main/docs/api.md#list-local-models]
    ```
 
 ### Configure API Keys
+
 1. **Open the `config.yaml`:**
    ```
     config.yaml
@@ -57,3 +53,8 @@ Ollama[https://github.com/ollama/ollama/blob/main/docs/api.md#list-local-models]
 python agent.py run
 ```
 Then enter your query.
+
+### Agent Schema:
+![Agent Schema](assets\agent_schema.png)
+
+
