@@ -1,9 +1,13 @@
-# Custom Web Search LLM Agent with llama3 instruct 8B using ollama
+### Project Overview: 
+To create a Llama 3 instruct Custom Web Search Agent with Ollama that runs entirely on the local machine. llama3 instruct is an LLM fine-tuned for chat/dialogue use cases.
 
-llama3 instruct is an LLM fine-tuned for chat/dialogue use cases.
+🛠️ Technologies Used:
+1. Llama3 Instruct 8B llm, 
+2. Ollama 
+3. Serper google search engine API
+4. Python 3.10.
 
 ### Prerequisites
-
 #### Environment Setup
 
 1. **Create a Virtual Environment using pip:**
@@ -79,3 +83,15 @@ If there was sufficient information, Integration agent compiles a response from 
 Quality assessment will be made on the integration agent response and a final response will be created if the criteria is met.
 
 ![Final Response](assets/final_response.png)
+
+Jun 2024 - Jun 2024
+
+
+### Summary:
+
+1. Pulled llama3 instruct 8B fine-tuned LLM in ollama ( framework to run llm models locally)
+2. Used serper as the primary tool for the search engine query intened for google search.
+3. Created planning agent to take user custom query as input and generate searchable queries.
+4. Created Integration agent to validate planning agent output and make a google search.
+5. Integration agent visited the sites and scraped the best pages to compile a response.
+6. Made a quality assessment on the compiled response and generated the final response if the response criteria was met.
