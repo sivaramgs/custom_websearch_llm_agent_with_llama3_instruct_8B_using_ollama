@@ -57,7 +57,8 @@ python agent.py run
 ```
 Then enter your query.
 
-### Agent Schema:
-![Agent Schema](assets\agent_schema.png)
+Here the query passed 'what is the population of chennai' ?
+
+chennai wikipedia [https://en.wikipedia.org/wiki/Chennai]
 
 
