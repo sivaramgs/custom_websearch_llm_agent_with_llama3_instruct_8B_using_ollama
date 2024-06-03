@@ -1,4 +1,4 @@
-# Custom Agent
+# Custom Web Search LLM Agent with llama3 instruct 8B using ollama
 
 A custom websearch agent useable with Ollama, OpenAI and vLLM.
 
