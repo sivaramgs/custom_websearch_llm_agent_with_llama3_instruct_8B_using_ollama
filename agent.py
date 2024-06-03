@@ -63,19 +63,10 @@ initialize_json_file()
 
 class Agent:
     def __init__(self, model, model_tool, model_qa, tool, temperature=0, max_tokens=1000, planning_agent_prompt=None, integration_agent_prompt=None, check_response_prompt=None, verbose=False, iterations=5, model_endpoint=None, server=None, stop=None):
+        
         self.server = server
         self.model_endpoint = model_endpoint
-
-        if server == 'openai':
-            load_config('config.yaml')
-            self.api_key = os.getenv('OPENAI_API_KEY')
-            self.headers = {
-            'Content-Type': 'application/json',
-            'Authorization': f'Bearer {self.api_key}'
-        }
-        else:
-            self.headers = {"Content-Type": "application/json"}
-            
+        self.headers = {"Content-Type": "application/json"}    
         self.temperature = temperature
         self.max_tokens = max_tokens
         self.tool_specs = tool.__doc__
@@ -105,27 +96,7 @@ class Agent:
                 "temperature": 0,
             }
 
-        if self.server == 'runpod' or self.server == 'openai':
-            payload = {
-                "model": self.model,
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": system_prompt
-                    },
-                    {
-                        "role": "user",
-                        "content": query
-                    }
-                ],
-                "stream": False,
-                "temperature": 0,
-                "stop": "<|eot_id|>"
-            }
-
-            if self.server == 'openai':
-                del payload["stop"]
-
+        
         try:
             response = requests.post(self.model_endpoint, headers=self.headers, data=json.dumps(payload))
             response_dict = response.json()
@@ -133,9 +104,7 @@ class Agent:
             if self.server == 'ollama':
                 response = response_dict['response']
             
-            if self.server == 'runpod' or self.server == 'openai':
-                response = response_dict['choices'][0]['message']['content']
-
+        
             print(colored(f"Planning Agent: {response}", 'green'))
             return response
         
@@ -164,27 +133,7 @@ class Agent:
                 "temperature": 0,
             }
 
-        if self.server == 'runpod' or self.server == 'openai':
-            payload = {
-                "model": self.model,
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": system_prompt
-                    },
-                    {
-                        "role": "user",
-                        "content": query
-                    }
-                ],
-                "stream": False,
-                "temperature": 0,
-                "stop": self.stop
-            }
-
-            if self.server == 'openai':
-                del payload["stop"]
-
+        
         try:
             response = requests.post(self.model_endpoint, headers=self.headers, data=json.dumps(payload))
             response_dict = response.json()
@@ -192,9 +141,7 @@ class Agent:
             if self.server == 'ollama':
                 response = response_dict['response']
             
-            if self.server == 'runpod' or self.server == 'openai':
-                response = response_dict['choices'][0]['message']['content']
-
+        
             print(colored(f"Integration Agent: {response}", 'cyan'))
 
             return response
@@ -216,27 +163,7 @@ class Agent:
                 "stop": self.stop
             }
 
-        if self.server == 'runpod' or self.server == 'openai':
-            payload = {
-                "model": self.model,
-                "response_format": {"type": "json_object"},
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": check_response_prompt
-                    },
-                    {
-                        "role": "user",
-                        "content": f"query: {query}\n\nresponse: {response}"
-                    }
-                ],
-                "temperature": 0,
-                "stop": self.stop
-            }
-
-            if self.server == 'openai':
-                del payload["stop"]
-
+        
         try: 
             response = requests.post(self.model_endpoint, headers=self.headers, data=json.dumps(payload))
             response_dict = response.json()
@@ -244,10 +171,7 @@ class Agent:
             if self.server == 'ollama':
                 decision_dict = json.loads(response_dict['response'])
 
-            if self.server == 'runpod' or self.server == 'openai':
-                response_content = response_dict['choices'][0]['message']['content']
-                decision_dict = json.loads(response_content)
-            
+                        
             print("Response Quality Assessment:", decision_dict)
             return decision_dict
         
@@ -299,24 +223,7 @@ if __name__ == '__main__':
     stop = None
     server = 'ollama'
 
-    # Params for RunPod
-    # model = "meta-llama/Meta-Llama-3-70B-Instruct"
-    # model_tool = "meta-llama/Meta-Llama-3-70B-Instruct"
-    # model_qa = "meta-llama/Meta-Llama-3-70B-Instruct"
-    # runpod_endpoint = 'https://hu40e1a0ry7vgl-8000.proxy.runpod.net/'  # Add your RunPod endpoint here
-    # completions_endpoint = 'v1/chat/completions'
-    # model_endpoint = runpod_endpoint + completions_endpoint
-    # stop = "<|eot_id|>"
-    # server = 'runpod'
-
-    # Params for OpenAI
-    # model = 'gpt-4o'
-    # model_tool = 'gpt-4o'
-    # model_qa = 'gpt-4o'
-    # model_endpoint = 'https://api.openai.com/v1/chat/completions'
-    # stop = None
-    # server = 'openai'
-
+    
     agent = Agent(model=model,
                   model_tool=model_tool,
                   model_qa=model_qa,
