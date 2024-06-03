@@ -2,10 +2,6 @@
 
 A custom websearch agent useable with Ollama, OpenAI and vLLM.
 
-### Agent Schema:
-![Agent Schema](AgentSchema.png)
-
-
 ### Prerequisites
 
 #### Environment Setup
@@ -50,7 +46,10 @@ Ollama[https://github.com/ollama/ollama/blob/main/docs/api.md#list-local-models]
 
 2. **Enter API Keys:**
    - **Serper API Key:** Get it from [https://serper.dev/](https://serper.dev/)
-   - **OpenAI API Key:** Get it from [https://openai.com/](https://openai.com/)
+   
+### Agent Schema:
+
+![Agent Schema](assets/agent_schema.png)
 
 ### Run Your Query
 ```
